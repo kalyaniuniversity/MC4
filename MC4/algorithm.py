@@ -1,27 +1,15 @@
 import pandas as pd 
 import numpy as np
 import time
+from MC4.utility import is_valid_path, get_filename
 import os
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.6f}".format(x)})
 
 
-def get_user_input():
+def get_dataframe(file_name):
 
-    while True:
-
-        file_path = input('\nEnter the path of the dataset: ')
-
-        if os.path.exists(file_path):
-
-            precision = float(input('\nEnter the precision(default is 0.0000001):') or '0.0000001')
-            iterations = int(input('\nEnter the number of iterations(default is 100):') or '500') 
-
-            df = pd.read_csv(file_path, header=0, index_col=0)
-
-            return df, precision, iterations
-        
-        print("\nFile path doesn't exist!! Enter correct path...")
+    return pd.read_csv(file_name, header=0, index_col=0)
 
 
 def get_matrix_shape(df):
@@ -49,7 +37,6 @@ def get_partial_transition_matrix(df, rows, cols):
                 val = 0
             else:
                 val = 1
-
 
             matrix_input = val
 
@@ -115,45 +102,49 @@ def get_stationary_matrix(state_matrix, transition_matrix, precision, iterations
 
 def calculate_aggregated_ranks(matrix):
 
-    a={}
-    rank=1
+    a = {}
+    rank = 1
+    
     for num in sorted(matrix, reverse = True):
         if num not in a:
-            a[num]=rank
-            rank=rank+1
+            a[num] = rank
+            rank = rank+1
+
     final_ranks = [a[i] for i in matrix]
 
     return final_ranks
 
 
-def display_ranks(index, final_ranks):
+# def display_ranks(index, final_ranks):
 
-    print('\nContestantwise ranks...\n')
+#     print('\nContestantwise ranks...\n')
 
-    for index_val, rank in zip(index, final_ranks):
-        print(f'{index_val} : {rank}', end = ' | ')
+#     for index_val, rank in zip(index, final_ranks):
+#         print(f'{index_val} : {rank}', end = ' | ')
 
-    print()
-
-
-def main():
-
-    df, precision, iterations = get_user_input()
-    # print(df)
-    rows, cols = get_matrix_shape(df)
-    partial_transition_matrix = get_partial_transition_matrix(df, rows, cols)
-    # print(partial_transition_matrix)
-    normalized_transition_matrix = get_normalized_transition_matrix(partial_transition_matrix, rows)
-    # print(normalized_transition_matrix)
-    ergodic_transition_matrix = get_ergodic_transition_matrix(normalized_transition_matrix, rows)
-    # print(ergodic_transition_matrix)
-    initial_state_matrix = get_initial_state_matrix(rows)
-    # print(initial_state_matrix)
-    stationary_matrix = get_stationary_matrix(initial_state_matrix, ergodic_transition_matrix, precision, iterations)
-    # print(stationary_matrix)
-    final_ranks = calculate_aggregated_ranks(stationary_matrix)
-    
-    display_ranks(df.index, final_ranks)
+#     print()
 
 
-main()
+def MC4_Aggregator(file_path, header=0, index_col=0, precision=0.0000001, iterations=200):
+
+    if is_valid_path(file_path):
+
+        file_name = get_filename(file_path)
+
+        df = get_dataframe(file_name)
+        # print(df)
+        rows, cols = get_matrix_shape(df)
+        partial_transition_matrix = get_partial_transition_matrix(df, rows, cols)
+        # print(partial_transition_matrix)
+        normalized_transition_matrix = get_normalized_transition_matrix(partial_transition_matrix, rows)
+        # print(normalized_transition_matrix)
+        ergodic_transition_matrix = get_ergodic_transition_matrix(normalized_transition_matrix, rows)
+        # print(ergodic_transition_matrix)
+        initial_state_matrix = get_initial_state_matrix(rows)
+        # print(initial_state_matrix)
+        stationary_matrix = get_stationary_matrix(initial_state_matrix, ergodic_transition_matrix, precision, iterations)
+        # print(stationary_matrix)
+        final_ranks = calculate_aggregated_ranks(stationary_matrix)
+        
+        return final_ranks
+
