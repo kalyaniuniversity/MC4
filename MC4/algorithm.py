@@ -9,10 +9,28 @@ np.set_printoptions(formatter={'float': lambda x: "{0:0.6f}".format(x)})
 
 def get_dataframe(file_name):
 
+    """Returns a dataframe object of a csv file
+
+    Args:
+        file_name (string): name of the csv file
+
+    Returns:
+        pandas.core.Dataframe: pandas dataframe object 
+    """
+
     return pd.read_csv(file_name, header=0, index_col=0)
 
 
 def get_matrix_shape(df):
+
+    """Returns shape(rows,cols) of a dataframe
+
+    Args:
+        df (pandas.core.Dataframe): pandas dataframe objects
+
+    Returns:
+        int,int: shape in the form of rows,cols
+    """
 
     rows = len(df.index)
     cols = len(df.columns)
@@ -20,20 +38,29 @@ def get_matrix_shape(df):
     return rows, cols
 
 
-def get_partial_transition_matrix(df, rows, cols):
+def get_partial_transition_matrix(df, items, lists):
+
+    """Returns the partial transition matrix from the dataframe containing different ranks
+
+    Args:
+        df (pandas.core.DataFrame): dataframe object containing different ranks
+        items (int): number of items
+        lists (int): number of lists
+
+    Returns:
+        numpy.ndarray: partial transition matrix
+    """
 
     resultant_matrix = list()
 
-    for i in range(rows):
-        for j in range(rows):
+    for i in range(items):
+        for j in range(items):
             
-            # print(f'\ni = {i}, j = {j}')
             result = len(df.columns[df.iloc[i] < df.iloc[j]])
-            # print(result)
 
             if result == 0 and i==j:
                 val = -1
-            elif result >= (cols/2):
+            elif result >= (lists/2):
                 val = 0
             else:
                 val = 1
@@ -42,41 +69,81 @@ def get_partial_transition_matrix(df, rows, cols):
 
             resultant_matrix.append(val)
 
-    return np.array(resultant_matrix).reshape(rows, rows)
+    return np.array(resultant_matrix).reshape(items, items)
 
 
-def get_normalized_transition_matrix(matrix, rows):
+def get_normalized_transition_matrix(p_matrix, items):
 
-    matrix = matrix / rows
+    """Returns the normalized transition matrix from the partial transition matrix
 
-    for i in range(rows):
-        for j in range(rows):
+    Args:
+        p_matrix (numpy.ndarray): partial transition matrix
+        items (int): number of items
+
+    Returns:
+        numpy.ndarray: normalized transition matrix
+    """
+
+    p_matrix = p_matrix / items
+
+    for i in range(items):
+        for j in range(items):
             if i == j:
 
-                result1 = sum(matrix[i, i+1:rows])
-                result2 = sum(matrix[i, 0:j])
+                result1 = sum(p_matrix[i, i+1:items])
+                result2 = sum(p_matrix[i, 0:j])
                 result = result1 + result2
                 
-                matrix[i,j] = 1 - result
+                p_matrix[i,j] = 1 - result
 
-    return matrix
-
-
-def get_ergodic_transition_matrix(normalized_transition_matrix, rows):
-
-   return (normalized_transition_matrix * 0.85) + (0.15/rows)
+    return p_matrix
 
 
-def get_initial_state_matrix(rows):
+def get_ergodic_transition_matrix(n_matrix, items, erg_number):
 
-    return np.repeat((1/rows), rows)
+    """Returns the ergotic transition matrix from normalized transition matrix
+
+    Args:
+        n_matrix (numpy.ndarray): normalized transition matrix
+        items (int): number of items
+        erg_number (float): small, positive ergotic number
+
+    Returns:
+        numpy.ndarray: ergodic transition matrix
+    """
+    
+    return (n_matrix * (1-erg_number)) + (erg_number/items)
 
 
-def get_stationary_matrix(state_matrix, transition_matrix, precision, iterations):
+def get_initial_distribution_matrix(items):
+
+    """Returns initial distribution matrix
+
+    Args:
+        items (int): number of items
+
+    Returns:
+        numpy.ndarray: initial distribution matrix
+    """
+
+    return np.repeat((1/items), items)
+
+
+def get_stationary_distribution_matrix(state_matrix, transition_matrix, precision, iterations):
+
+    """Returns stationary distribution matrix
+
+    Args:
+        state_matrix (numpy.ndarray): initial distribution matrix
+        transition_matrix (numpy.ndarray): final transition matrix or ergodic transition matrix
+        precision (float): acceptable error margin for convergence, default is 1e-07
+        iterations (int): number of iterations to reach stationary distribution, default is 200
+
+    Returns:
+        numpy.ndarray: stationary distribution matrix
+    """
 
     counter = 1
-
-    # print('\nStationary matrix calculation...')
 
     while counter <= iterations:
 
@@ -89,10 +156,6 @@ def get_stationary_matrix(state_matrix, transition_matrix, precision, iterations
         if (np.abs(error) < precision).all():
             break
 
-        # print(f'iter: {counter} | Matrix: {state_matrix} | error: {error}')
-
-        # time.sleep(0.3)
-
         state_matrix = new_state_matrix
 
         counter += 1
@@ -100,7 +163,16 @@ def get_stationary_matrix(state_matrix, transition_matrix, precision, iterations
     return state_matrix
 
 
-def calculate_aggregated_ranks(matrix):
+def get_aggregated_ranks(matrix):
+
+    """Return the final aggregated ranks based on the stationary distribution matrix
+
+    Args:
+        matrix (numpy.ndarray): stationary distribution matrix
+
+    Returns:
+        list: final aggregated ranks
+    """
 
     a = {}
     rank = 1
@@ -115,36 +187,40 @@ def calculate_aggregated_ranks(matrix):
     return final_ranks
 
 
-# def display_ranks(index, final_ranks):
+def MC4_Aggregator(file_path, header=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
 
-#     print('\nContestantwise ranks...\n')
+    """Performs aggregation on different ranks using Markov Chain Type 4 Rank Aggeregation algorithm and returns the aggregated ranks 
 
-#     for index_val, rank in zip(index, final_ranks):
-#         print(f'{index_val} : {rank}', end = ' | ')
+    Args:
+        file_path (string): path of the dataset file containing all different ranks
+        header (int or None): row number of the dataset containing the header, default is 0
+        index_col (int or None): column number of the dataset containing the index, default is 0
+        precision (float): acceptable error margin for convergence, default is 1e-07
+        iterations (int): number of iterations to reach stationary distribution, default is 200
+        erg_number (float): small,positive number used to calculate ergodic transition matrix, default is 0.15
 
-#     print()
-
-
-def MC4_Aggregator(file_path, header=0, index_col=0, precision=0.0000001, iterations=200):
+    Returns:
+        list: contestantwise aggregated ranks
+    """
 
     if is_valid_path(file_path):
 
         file_name = get_filename(file_path)
 
         df = get_dataframe(file_name)
-        # print(df)
+
         rows, cols = get_matrix_shape(df)
+
         partial_transition_matrix = get_partial_transition_matrix(df, rows, cols)
-        # print(partial_transition_matrix)
+
         normalized_transition_matrix = get_normalized_transition_matrix(partial_transition_matrix, rows)
-        # print(normalized_transition_matrix)
-        ergodic_transition_matrix = get_ergodic_transition_matrix(normalized_transition_matrix, rows)
-        # print(ergodic_transition_matrix)
-        initial_state_matrix = get_initial_state_matrix(rows)
-        # print(initial_state_matrix)
-        stationary_matrix = get_stationary_matrix(initial_state_matrix, ergodic_transition_matrix, precision, iterations)
-        # print(stationary_matrix)
-        final_ranks = calculate_aggregated_ranks(stationary_matrix)
+
+        ergodic_transition_matrix = get_ergodic_transition_matrix(normalized_transition_matrix, rows, erg_number)
+
+        initial_distribution_matrix = get_initial_distribution_matrix(rows)
+
+        stationary_distribution_matrix = get_stationary_distribution_matrix(initial_distribution_matrix, ergodic_transition_matrix, precision, iterations)
+
+        final_ranks = get_aggregated_ranks(stationary_distribution_matrix)
         
         return final_ranks
-
