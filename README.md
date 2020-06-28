@@ -1,5 +1,5 @@
 # Markov Chain Type 4 Rank Aggregation
-** implementation of MC4 Rank Aggregation algorithm using Python**
+**implementation of MC4 Rank Aggregation algorithm using Python**
 
 ### Description
 
@@ -18,7 +18,7 @@ Therefore a rank aggregation technique is often used for combining the individua
 
 For the latest release, `pip install mc4`
 
-For a specific release,`pip install mc4=={version}` such as `pip install mc4==1.0`
+For a specific release,`pip install mc4=={version}` such as `pip install mc4==1.0.0`
 
 ## Usage
 
@@ -33,7 +33,7 @@ aggregated_ranks = mc4_aggregator('dataset.csv')
 
 print(aggregated_ranks)
 ```
-here `dataset.csv` is a dataset containing ranks provided by different ranking algorithms or rank lists. You can refer [here](test_datasets/) for more info and some test datasets.
+here `dataset.csv` is a dataset containing ranks provided by different ranking algorithms or rank lists. You can refer [here](test_datasets/datasets.md) for more info and some test datasets.
 
 `MC4_Aggregator` takes some additional arguments as well.
 
