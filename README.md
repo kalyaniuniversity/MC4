@@ -17,6 +17,7 @@ Therefore a rank aggregation technique is often used for combining the individua
 ## Installation
 
 For latest release, `pip install MC4`
+
 For a specific release,`pip install MC4=={version}` such as `pip install MC4==1.0`
 
 ## Usage
@@ -26,9 +27,9 @@ For a specific release,`pip install MC4=={version}` such as `pip install MC4==1.
 Using this package is very easy. You just need following three lines of code to use the package.
 
 ```
-from MC4.algorithm import MC4_Aggregator
+from mc4.algorithm import mc4_aggregator
 
-aggregated_ranks = MC4_Aggregator('dataset.csv')
+aggregated_ranks = mc4_aggregator('dataset.csv')
 
 print(aggregated_ranks)
 ```
@@ -36,16 +37,16 @@ here `dataset.csv` is a dataset containing ranks provided by different ranking a
 
 `MC4_Aggregator` takes some additional arguments as well.
 
-`header_row (int or None)`: row number of the dataset containing the header, default is `0`
-`index_col (int or None)`: column number of the dataset containing the index, default is `0`
-`precision (float)`: acceptable error margin for convergence, default is `1e-07`
-`iterations (int)`: number of iterations to reach stationary distribution, default is `200`
-`erg_number (float)`: small, positive number used to calculate ergodic transition matrix, default is `0.15`
+* `header_row (int or None)`: row number of the dataset containing the header, default is `0`
+* `index_col (int or None)`: column number of the dataset containing the index, default is `0`
+* `precision (float)`: acceptable error margin for convergence, default is `1e-07`
+* `iterations (int)`: number of iterations to reach stationary distribution, default is `200`
+* `erg_number (float)`: small, positive number used to calculate ergodic transition matrix, default is `0.15`
 
-
-For full documentation, please visit [Documentation Wiki](https://github.com/kalyaniuniversity/MC4/wiki)
-To report issues or request a feature, please visit [Issues](https://github.com/kalyaniuniversity/MC4/issues)
-Follow author, Ayan Kumar Saha - [GitHub](https://github.com/Ayan-Kumar-Saha) | [LinkedIn](https://www.linkedin.com/in/ayankumarsaha/)
+#### Reference
+* For full documentation, please visit [Documentation Wiki](https://github.com/kalyaniuniversity/MC4/wiki)
+* To report issues or request a feature, please visit [Issues](https://github.com/kalyaniuniversity/MC4/issues)
+* Follow author, Ayan Kumar Saha - [GitHub](https://github.com/Ayan-Kumar-Saha) | [LinkedIn](https://www.linkedin.com/in/ayankumarsaha/)
 
 ### Upcoming features
 * Column major support

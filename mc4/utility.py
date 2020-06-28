@@ -31,7 +31,7 @@ def is_valid_path(file_path):
     """
 
     if os.path.exists(file_path):
-        print(file_path)
+
         return True
     
     raise FileNotFoundError(f"Could not find {get_filename(file_path)} file!")

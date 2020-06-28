@@ -1,7 +1,7 @@
 import pandas as pd 
 import numpy as np
 import time
-from MC4.utility import is_valid_path, get_filename
+from mc4.utility import is_valid_path, get_filename
 import os
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.6f}".format(x)})
@@ -187,7 +187,7 @@ def get_aggregated_ranks(matrix):
     return final_ranks
 
 
-def MC4_Aggregator(file_path, header_row=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
+def mc4_aggregator(file_path, header_row=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
 
     """Performs aggregation on different ranks using Markov Chain Type 4 Rank Aggeregation algorithm and returns the aggregated ranks 
 
@@ -204,8 +204,6 @@ def MC4_Aggregator(file_path, header_row=0, index_col=0, precision=0.0000001, it
     """
 
     if is_valid_path(file_path):
-
-        # file_name = get_filename(file_path)
 
         df = get_dataframe(file_path, header_row=header_row,index_col=index_col)
 
