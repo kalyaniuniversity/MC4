@@ -7,18 +7,18 @@ import os
 np.set_printoptions(formatter={'float': lambda x: "{0:0.6f}".format(x)})
 
 
-def get_dataframe(file_name):
+def get_dataframe(file_path, header_row, index_col):
 
     """Returns a dataframe object of a csv file
 
     Args:
-        file_name (string): name of the csv file
+        file_path (string): path of the csv file
 
     Returns:
         pandas.core.Dataframe: pandas dataframe object 
     """
 
-    return pd.read_csv(file_name, header=0, index_col=0)
+    return pd.read_csv(file_path, header=header_row, index_col=index_col)
 
 
 def get_matrix_shape(df):
@@ -187,13 +187,13 @@ def get_aggregated_ranks(matrix):
     return final_ranks
 
 
-def MC4_Aggregator(file_path, header=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
+def MC4_Aggregator(file_path, header_row=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
 
     """Performs aggregation on different ranks using Markov Chain Type 4 Rank Aggeregation algorithm and returns the aggregated ranks 
 
     Args:
         file_path (string): path of the dataset file containing all different ranks
-        header (int or None): row number of the dataset containing the header, default is 0
+        header_row (int or None): row number of the dataset containing the header, default is 0
         index_col (int or None): column number of the dataset containing the index, default is 0
         precision (float): acceptable error margin for convergence, default is 1e-07
         iterations (int): number of iterations to reach stationary distribution, default is 200
@@ -205,9 +205,9 @@ def MC4_Aggregator(file_path, header=0, index_col=0, precision=0.0000001, iterat
 
     if is_valid_path(file_path):
 
-        file_name = get_filename(file_path)
+        # file_name = get_filename(file_path)
 
-        df = get_dataframe(file_name)
+        df = get_dataframe(file_path, header_row=header_row,index_col=index_col)
 
         rows, cols = get_matrix_shape(df)
 

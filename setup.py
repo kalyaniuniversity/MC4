@@ -1,22 +1,32 @@
-import setuptools
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-setuptools.setup(
-    name="MC4", # Replace with your own username
-    version="0.0.1",
+setup(
+    name="MC4",
+    version="1.0",
     author="Ayan Kumar Saha",
     author_email="ayankumarsaha96@gmail.com",
-    description="A package for implementing Markov Chain Type 4 rank aggregation",
+    description="A python package for implementing Markov Chain Type 4 rank aggregation",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
-    packages=setuptools.find_packages(),
+    url="https://github.com/kalyaniuniversity/MC4",
+    packages=find_packages(exclude=['docs', 'test*']),
+    install_requires=['numpy>=1.19.0', 'pandas>=1.0.5'],
     classifiers=[
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
+    keywords='Machine Learning, Ranking, Markov Chain',
     python_requires='>=3.6',
+    project_urls={  
+        'Full Documentation': 'https://github.com/kalyaniuniversity/MC4/wiki',
+        'Bug Reports': 'https://github.com/kalyaniuniversity/MC4/issues',
+        'Follow Author': 'https://github.com/Ayan-Kumar-Saha'
+    }
 )
