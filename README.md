@@ -16,9 +16,9 @@ Therefore a rank aggregation technique is often used for combining the individua
 
 ## Installation
 
-For latest release, `pip install MC4`
+For latest release, `pip install mc4`
 
-For a specific release,`pip install MC4=={version}` such as `pip install MC4==1.0`
+For a specific release,`pip install mc4=={version}` such as `pip install mc4==1.0`
 
 ## Usage
 
