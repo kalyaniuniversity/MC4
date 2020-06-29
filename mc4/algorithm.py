@@ -1,28 +1,31 @@
 import pandas as pd 
 import numpy as np
 import time
-from mc4.utility import is_valid_path, get_filename
+from mc4.utility import is_valid_path, get_filename, is_csv
 import os
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.6f}".format(x)})
 
 
-def get_dataframe(file_path, order, header_row, index_col):
+def get_dataframe(source, order, header_row, index_col):
 
     """Returns a dataframe object of a csv file
 
     Args:
-        file_path (string): path of the csv file
+        source (string): path of the csv file
+        order (string): order of the dataset
+        header_row (int or None): row number of the dataset containing the header
+        index_col (int or None): column number of the dataset containing the index
 
     Returns:
         pandas.core.Dataframe: pandas dataframe object 
     """
 
     if order == 'row':
-        return pd.read_csv(file_path, header=header_row, index_col=index_col)
+        return pd.read_csv(source, header=header_row, index_col=index_col)
 
     elif order == 'column':
-        return pd.read_csv(file_path, header=header_row, index_col=index_col).transpose()
+        return pd.read_csv(source, header=header_row, index_col=index_col).transpose()
     
     else:
         raise ValueError(f"incorrect argument value order='{order}'")
@@ -194,7 +197,7 @@ def get_aggregated_ranks(matrix):
     return final_ranks
 
 
-def mc4_aggregator(file_path, order = 'row', header_row=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
+def mc4_aggregator(source, order = 'row', header_row=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
 
     """Performs aggregation on different ranks using Markov Chain Type 4 Rank Aggeregation algorithm and returns the aggregated ranks 
 
@@ -211,22 +214,36 @@ def mc4_aggregator(file_path, order = 'row', header_row=0, index_col=0, precisio
         list: contestantwise aggregated ranks
     """
 
-    if is_valid_path(file_path):
+    if isinstance(source, str) and is_csv(source):
 
-        df = get_dataframe(file_path, order=order, header_row=header_row, index_col=index_col)
+        if is_valid_path(source):
+            df = get_dataframe(source, order=order, header_row=header_row, index_col=index_col)
 
-        rows, cols = get_matrix_shape(df)
+    elif isinstance(source, pd.DataFrame):
+        if order == 'row':
+            df = source
 
-        partial_transition_matrix = get_partial_transition_matrix(df, rows, cols)
+        elif order == 'column':
+            df = source.transpose()
 
-        normalized_transition_matrix = get_normalized_transition_matrix(partial_transition_matrix, rows)
-
-        ergodic_transition_matrix = get_ergodic_transition_matrix(normalized_transition_matrix, rows, erg_number)
-
-        initial_distribution_matrix = get_initial_distribution_matrix(rows)
-
-        stationary_distribution_matrix = get_stationary_distribution_matrix(initial_distribution_matrix, ergodic_transition_matrix, precision, iterations)
-
-        final_ranks = get_aggregated_ranks(stationary_distribution_matrix)
+        else:
+            raise ValueError(f"incorrect argument value order='{order}'")
         
-        return final_ranks
+    else:
+        raise Exception(f"Unsupported data source '{get_filename(source)}'")
+
+    rows, cols = get_matrix_shape(df)
+
+    partial_transition_matrix = get_partial_transition_matrix(df, rows, cols)
+
+    normalized_transition_matrix = get_normalized_transition_matrix(partial_transition_matrix, rows)
+
+    ergodic_transition_matrix = get_ergodic_transition_matrix(normalized_transition_matrix, rows, erg_number)
+
+    initial_distribution_matrix = get_initial_distribution_matrix(rows)
+
+    stationary_distribution_matrix = get_stationary_distribution_matrix(initial_distribution_matrix, ergodic_transition_matrix, precision, iterations)
+
+    final_ranks = get_aggregated_ranks(stationary_distribution_matrix)
+    
+    return final_ranks
