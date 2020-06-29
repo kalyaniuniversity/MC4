@@ -7,7 +7,7 @@ import os
 np.set_printoptions(formatter={'float': lambda x: "{0:0.6f}".format(x)})
 
 
-def get_dataframe(file_path, header_row, index_col):
+def get_dataframe(file_path, order, header_row, index_col):
 
     """Returns a dataframe object of a csv file
 
@@ -18,7 +18,14 @@ def get_dataframe(file_path, header_row, index_col):
         pandas.core.Dataframe: pandas dataframe object 
     """
 
-    return pd.read_csv(file_path, header=header_row, index_col=index_col)
+    if order == 'row':
+        return pd.read_csv(file_path, header=header_row, index_col=index_col)
+
+    elif order == 'column':
+        return pd.read_csv(file_path, header=header_row, index_col=index_col).transpose()
+    
+    else:
+        raise ValueError(f"incorrect argument value order='{order}'")
 
 
 def get_matrix_shape(df):
@@ -187,12 +194,13 @@ def get_aggregated_ranks(matrix):
     return final_ranks
 
 
-def mc4_aggregator(file_path, header_row=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
+def mc4_aggregator(file_path, order = 'row', header_row=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
 
     """Performs aggregation on different ranks using Markov Chain Type 4 Rank Aggeregation algorithm and returns the aggregated ranks 
 
     Args:
         file_path (string): path of the dataset file containing all different ranks
+        order (string): order of the dataset, default is row i.e. row-major
         header_row (int or None): row number of the dataset containing the header, default is 0
         index_col (int or None): column number of the dataset containing the index, default is 0
         precision (float): acceptable error margin for convergence, default is 1e-07
@@ -205,7 +213,7 @@ def mc4_aggregator(file_path, header_row=0, index_col=0, precision=0.0000001, it
 
     if is_valid_path(file_path):
 
-        df = get_dataframe(file_path, header_row=header_row,index_col=index_col)
+        df = get_dataframe(file_path, order=order, header_row=header_row, index_col=index_col)
 
         rows, cols = get_matrix_shape(df)
 

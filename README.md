@@ -11,7 +11,8 @@ Therefore a rank aggregation technique is often used for combining the individua
 
 *Links to the original contents*
 
-* [MC4 Paper](http://www10.org/cdrom/papers/577/)
+* [Rank Aggregation methods for Web: PDF](https://dl.acm.org/doi/pdf/10.1145/371920.372165)
+* [Rank Aggregation methods for Web: web version](http://www10.org/cdrom/papers/577/)
 
 
 ## Installation
@@ -22,7 +23,7 @@ For a specific release,`pip install mc4=={version}` such as `pip install mc4==1.
 
 ## Usage
 
-*Please Note: As per the latest release(v1.0), This package works with CSV files only. We will add more features, controls and file support in the upcoming releases.*
+*Please Note: As per the latest release, this package works with CSV files only. We will add more features, controls and file support in the upcoming releases.*
 
 Using this package is very easy. You just need the following three lines of code to use the package.
 
@@ -35,8 +36,9 @@ print(aggregated_ranks)
 ```
 here `dataset.csv` is a dataset containing ranks provided by different ranking algorithms or rank lists. You can refer [here](test_datasets/datasets.md) for more info and some test datasets.
 
-`MC4_Aggregator` takes some additional arguments as well.
+`mc4_aggregator` takes some additional arguments as well.
 
+* `order (string)`: order of the dataset, default is `'row'`
 * `header_row (int or None)`: row number of the dataset containing the header, default is `0`
 * `index_col (int or None)`: column number of the dataset containing the index, default is `0`
 * `precision (float)`: acceptable error margin for convergence, default is `1e-07`

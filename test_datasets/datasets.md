@@ -16,6 +16,6 @@ These are some test datasets to test the package. All these datasets are prepare
 | [test_dataset_8.csv](test_dataset_8.csv) | 5 | 100 | None | None | column-major |
 
 
-*****row-major** means rank holders or **items** are in **rows** and rank providers or **lists** are in **columns***
+*****row-major** means rank holders or **items** are in **rows** and rank providers are in **columns***
 
-*****column-major** means rank holders or **items** are in **columns** and rank providers or **lists** are in **rows***
+*****column-major** means rank holders or **items** are in **columns** and rank providers are in **rows***
