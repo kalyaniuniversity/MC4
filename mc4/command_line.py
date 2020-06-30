@@ -14,12 +14,5 @@ parser.add_argument('-e', '--erg_number', type=float, default=0.15, help='ergodi
 args = parser.parse_args()
 
 def main():
-    print(f'source - {args.source} and type - {type(args.source)}')
-    print(f'order - {args.order} and type - {type(args.order)}')
-    print(f'header row - {args.header_row} and type - {type(args.header_row)}')
-    print(f'index col - {args.index_col} and type - {type(args.index_col)}')
-    print(f'precision - {args.precision} and type - {type(args.precision)}')
-    print(f'iterations - {args.iterations} and type - {type(args.iterations)}')
-    print(f'erg number - {args.erg_number} and type - {type(args.erg_number)}')
     print(mc4_aggregator(args.source, args.order, args.header_row, args.index_col, args.precision, args.iterations, args.erg_number))
 

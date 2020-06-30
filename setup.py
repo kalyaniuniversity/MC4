@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mc4",
-    version="2.1.0",
+    version="2.1.1",
     author="Ayan Kumar Saha",
     author_email="ayankumarsaha96@gmail.com",
     description="A python package for implementing Markov Chain Type 4 rank aggregation",
