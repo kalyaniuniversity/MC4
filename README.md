@@ -102,6 +102,3 @@ Output of `mc4_aggregator` will be a list of itemwise aggregated ranks such as i
 * For full documentation, please visit [Documentation Wiki](https://github.com/kalyaniuniversity/MC4/wiki)
 * To report issues or request a feature, please visit [Issues](https://github.com/kalyaniuniversity/MC4/issues)
 * Follow author, Ayan Kumar Saha - [GitHub](https://github.com/Ayan-Kumar-Saha) | [LinkedIn](https://www.linkedin.com/in/ayankumarsaha/)
-
-### Upcoming features
-* command line support
