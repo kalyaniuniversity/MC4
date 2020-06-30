@@ -11,6 +11,7 @@ setup(
     description="A python package for implementing Markov Chain Type 4 rank aggregation",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    license='LICENSE',
     url="https://github.com/kalyaniuniversity/MC4",
     packages=find_packages(exclude=['docs', 'test*']),
     install_requires=['numpy>=1.19.0', 'pandas>=1.0.5'],
@@ -22,6 +23,9 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
+    entry_points = {
+        'console_scripts': ['mc4_aggregator=mc4.command_line:main'],
+    },
     keywords='Machine Learning, Ranking, Markov Chain',
     python_requires='>=3.6',
     project_urls={  

@@ -197,15 +197,15 @@ def get_aggregated_ranks(matrix):
     return final_ranks
 
 
-def mc4_aggregator(source, order = 'row', header_row=0, index_col=0, precision=0.0000001, iterations=200, erg_number=0.15):
+def mc4_aggregator(source, order = 'row', header_row=None, index_col=None, precision=0.0000001, iterations=200, erg_number=0.15):
 
     """Performs aggregation on different ranks using Markov Chain Type 4 Rank Aggeregation algorithm and returns the aggregated ranks 
 
     Args:
         file_path (string): path of the dataset file containing all different ranks
         order (string): order of the dataset, default is row i.e. row-major
-        header_row (int or None): row number of the dataset containing the header, default is 0
-        index_col (int or None): column number of the dataset containing the index, default is 0
+        header_row (int or None): row number of the dataset containing the header, default is None
+        index_col (int or None): column number of the dataset containing the index, default is None
         precision (float): acceptable error margin for convergence, default is 1e-07
         iterations (int): number of iterations to reach stationary distribution, default is 200
         erg_number (float): small,positive number used to calculate ergodic transition matrix, default is 0.15
