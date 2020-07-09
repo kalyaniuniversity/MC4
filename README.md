@@ -96,7 +96,7 @@ here `dataset.csv` or `df` are lists of ranks provided by different ranking algo
 
 ## Output
 
-Output of `mc4_aggregator` will be a list of itemwise aggregated ranks such as if the output is [5, 2, 4, 6] then 5 is the aggregated rank of item 0, 2 is the aggregated rank of item 1 and so on.
+Output of `mc4_aggregator` will be a dictionary containing itemwise ranks. In absence of item names, items will be represented using integers.
 
 ## Important Links
 * For full documentation, please visit [Documentation Wiki](https://github.com/kalyaniuniversity/MC4/wiki)

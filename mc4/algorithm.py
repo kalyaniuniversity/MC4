@@ -197,6 +197,25 @@ def get_aggregated_ranks(matrix):
     return final_ranks
 
 
+def get_mapped_final_ranks(df, final_ranks, index_col):
+
+    ranks = dict()
+
+    if index_col != None:
+
+        for item, rank in zip(df.index, final_ranks):
+            ranks[item] = rank
+
+    else:
+
+        items = np.arange(0, len(df.index)+1)
+
+        for item, rank in zip(items, final_ranks):
+            ranks[item] = rank
+
+    return ranks
+
+
 def mc4_aggregator(source, order = 'row', header_row=None, index_col=None, precision=0.0000001, iterations=200, erg_number=0.15):
 
     """Performs aggregation on different ranks using Markov Chain Type 4 Rank Aggeregation algorithm and returns the aggregated ranks 
@@ -245,5 +264,7 @@ def mc4_aggregator(source, order = 'row', header_row=None, index_col=None, preci
     stationary_distribution_matrix = get_stationary_distribution_matrix(initial_distribution_matrix, ergodic_transition_matrix, precision, iterations)
 
     final_ranks = get_aggregated_ranks(stationary_distribution_matrix)
+
+    mapped_final_ranks = get_mapped_final_ranks(df, final_ranks, index_col)
     
-    return final_ranks
+    return mapped_final_ranks
