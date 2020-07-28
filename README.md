@@ -11,7 +11,7 @@ Therefore a rank aggregation technique is often used for combining the individua
 
 *Links to the original contents*
 
-* [Rank Aggregation methods for Web: PDF](https://dl.acm.org/doi/pdf/10.1145/371920.372165)
+* [Rank Aggregation methods for Web: PDF version](https://www.stat.uchicago.edu/~lekheng/meetings/mathofranking/ref/kumar.pdf)
 * [Rank Aggregation methods for Web: web version](http://www10.org/cdrom/papers/577/)
 
 
