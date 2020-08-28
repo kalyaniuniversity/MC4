@@ -48,12 +48,13 @@ def get_matrix_shape(df):
     return rows, cols
 
 
-def get_partial_transition_matrix(df, items, lists):
+def get_partial_transition_matrix(df, algo, items, lists):
 
     """Returns the partial transition matrix from the dataframe containing different ranks
 
     Args:
         df (pandas.core.DataFrame): dataframe object containing different ranks
+        algo (string): mc4 or mct
         items (int): number of items
         lists (int): number of lists
 
@@ -70,10 +71,13 @@ def get_partial_transition_matrix(df, items, lists):
 
             if result == 0 and i==j:
                 val = -1
-            elif result >= (lists/2):
+            elif result > (lists/2):
                 val = 0
             else:
-                val = 1
+                if algo == 'mc4':
+                    val = 1
+                else: 
+                    val = (lists-result) / lists
 
             matrix_input = val
 
@@ -216,12 +220,13 @@ def get_mapped_final_ranks(df, final_ranks, index_col):
     return ranks
 
 
-def mc4_aggregator(source, order = 'row', header_row=None, index_col=None, precision=0.0000001, iterations=200, erg_number=0.15):
+def mc4_aggregator(source, algo='mc4', order = 'row', header_row=None, index_col=None, precision=0.0000001, iterations=200, erg_number=0.15):
 
     """Performs aggregation on different ranks using Markov Chain Type 4 Rank Aggeregation algorithm and returns the aggregated ranks 
 
     Args:
         file_path (string): path of the dataset file containing all different ranks
+        algo (string): mc4 or mct, default is mc4
         order (string): order of the dataset, default is row i.e. row-major
         header_row (int or None): row number of the dataset containing the header, default is None
         index_col (int or None): column number of the dataset containing the index, default is None
@@ -232,6 +237,9 @@ def mc4_aggregator(source, order = 'row', header_row=None, index_col=None, preci
     Returns:
         list: contestantwise aggregated ranks
     """
+
+    if algo not in ['mc4', 'mct']:
+        raise Exception(f"Invalid ranking algorithm '{algo}'")
 
     if isinstance(source, str) and is_csv(source):
 
@@ -251,9 +259,10 @@ def mc4_aggregator(source, order = 'row', header_row=None, index_col=None, preci
     else:
         raise Exception(f"Unsupported data source '{get_filename(source)}'")
 
+
     rows, cols = get_matrix_shape(df)
 
-    partial_transition_matrix = get_partial_transition_matrix(df, rows, cols)
+    partial_transition_matrix = get_partial_transition_matrix(df, algo, rows, cols)
 
     normalized_transition_matrix = get_normalized_transition_matrix(partial_transition_matrix, rows)
 
